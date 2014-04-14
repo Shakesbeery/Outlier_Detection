@@ -16,7 +16,7 @@ class feature:
         self.bounds = {'top': 0, 'bottom': 0}
         self.length = [len(str(x)) for x in info_list]
         try:
-            self.values = [float(x) for x in info_list]
+            self.value = [int(x) for x in info_list]
         except ValueError:
             pass
         
@@ -34,11 +34,11 @@ class feature:
         self.SD(data_type)
         self.bounds['bottom'] = self.avg - self.three_sigma
         self.bounds['top'] = self.avg + self.three_sigma
-        for i, item in enumerate(self.values):
+        for i, item in enumerate(self.value):
             if item > self.bounds['top']:
-                print self.data[i], "Is greater than the 3-sigma upper bound..."
+                print self.data[i], "has a {0} greater than the upper limit {1}...".format(data_type, self.bounds['top'])
             elif item < self.bounds['bottom']:
-                print self.data[i], "Is less than the 3-sigma lower bound..."
+                print self.data[i], "has a {0} lower than the lower limit {1}...".format(data_type, self.bounds['bottom'])
         print "No other outliers detected in data set!"
 
 def marathonData(loc):

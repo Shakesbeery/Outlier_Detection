@@ -5,10 +5,15 @@ Created on Mon Apr 14 12:09:21 2014
 @author: David Beery
 """
 import numpy as np
+import pandas as pd
 
 class feature:
     def __init__(self, info_list):
         self.data = info_list
+        self.avg = 0.0
+        self.std_dev = 0.0
+        self.three_sigma = 0.0
+        self.bounds = {'top': 0, 'bottom': 0}
         self.length = [len(str(x)) for x in info_list]
         try:
             self.values = [float(x) for x in info_list]
@@ -17,12 +22,26 @@ class feature:
         
     def SD(self, data_type):
         values = getattr(self, data_type)
-        return np.std(values)
+        self.std_dev = np.std(values)
+        self.three_sigma = self.std_dev*3
     
     def mean(self, data_type):
         values = getattr(self, data_type)
-        return np.mean(values)
+        self.avg = np.mean(values)
         
-    def outlier(self):
-        pass
-            
+    def outlier(self, data_type):
+        self.mean(data_type)
+        self.SD(data_type)
+        self.bounds['bottom'] = self.avg - self.three_sigma
+        self.bounds['top'] = self.avg + self.three_sigma
+        for i, item in enumerate(self.values):
+            if item > self.bounds['top']:
+                print self.data[i], "Is greater than the 3-sigma upper bound..."
+            elif item < self.bounds['bottom']:
+                print self.data[i], "Is less than the 3-sigma lower bound..."
+        print "No other outliers detected in data set!"
+
+def marathonData(loc):
+    df = pd.read_csv(loc)
+    return list(df["Time in Seconds"])
+    

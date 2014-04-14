@@ -6,8 +6,12 @@ Created on Mon Apr 14 12:06:10 2014
 """
 __version__ = '1.0'
 
+from features import feature, marathonData
+
 def main():
-    pass
+    info = marathonData("D:\\Users\\David Beery\\Google Drive\\full.csv")
+    test = feature(info)
+    test.outlier('values')
 
 if __name__ == '__main__':
     main()
